@@ -253,21 +253,29 @@ export function createParticleField(canvas: HTMLCanvasElement): ParticleField | 
   ro.observe(canvas)
   rebuild()
 
+  let lastFrame = performance.now()
+
   function frame(now: number) {
     if (destroyed) return
     raf = requestAnimationFrame(frame)
-    if (paused || count === 0) return
+    if (paused || count === 0) {
+      lastFrame = now
+      return
+    }
+    const dt = Math.min(0.05, Math.max(0.001, (now - lastFrame) / 1000))
+    lastFrame = now
 
-    // ease interaction state toward targets
+    // ease interaction state toward targets — dt-based, frame-rate independent
+    const ease = (k: number) => 1 - Math.exp(-dt * k)
     if (mouseX < -999) {
       mouseX = targetX
       mouseY = targetY
     }
-    mouseX += (targetX - mouseX) * 0.12
-    mouseY += (targetY - mouseY) * 0.12
-    pointer += (pointerTarget - pointer) * 0.08
-    charge += (chargeTarget - charge) * (chargeTarget > charge ? 0.045 : 0.1)
-    burst *= 0.92
+    mouseX += (targetX - mouseX) * ease(8)
+    mouseY += (targetY - mouseY) * ease(8)
+    pointer += (pointerTarget - pointer) * ease(5)
+    charge += (chargeTarget - charge) * ease(chargeTarget > charge ? 1.6 : 6)
+    burst *= Math.exp(-dt * 5)
 
     const t = (now - start) / 1000
     const intro = Math.min(1, t / 1.6)
@@ -282,6 +290,15 @@ export function createParticleField(canvas: HTMLCanvasElement): ParticleField | 
         target: [Math.round(targetX), Math.round(targetY)],
         count,
         size: [width, height],
+        // QA hook: jump interaction state instantly (visual testing in environments
+        // where rAF only runs on forced frames)
+        force(x: number, y: number, p: number, c: number, b = 0) {
+          targetX = mouseX = x
+          targetY = mouseY = y
+          pointerTarget = pointer = p
+          chargeTarget = charge = c
+          burst = b
+        },
       }
     }
 

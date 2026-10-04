@@ -12,9 +12,17 @@ console.log(
   'color:#5ac8ff;font-family:monospace;font-size:12px',
 )
 
-// QA/e2e escape hatch: ?static renders everything revealed, no scroll choreography
+// QA/e2e escape hatch: ?static renders everything revealed, no scroll choreography,
+// and lands on the URL hash immediately (SPAs mount after the native hash jump)
 if (new URLSearchParams(location.search).has('static')) {
   document.documentElement.classList.add('force-static')
+  if (location.hash) {
+    // after React's initial commit (rAF may be suspended in headless/hidden tabs)
+    setTimeout(
+      () => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'instant', block: 'start' }),
+      120,
+    )
+  }
 }
 
 createRoot(document.getElementById('root')!).render(
