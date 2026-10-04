@@ -17,7 +17,7 @@ export const identity = {
   tagline:
     'I build the machinery behind an infinite canvas — layout engines, rendering pipelines and a framework that ships from one C++ core to Web, iOS, macOS and Android.',
   socials: [
-    { label: 'GitHub', href: 'https://github.com/Mahi-Eshu', icon: 'github' },
+    { label: 'GitHub', href: 'https://github.com/maheshkumarvenkatesan03', icon: 'github' },
     {
       label: 'LinkedIn',
       href: 'https://www.linkedin.com/in/mahesh-kumar-venkatesan-b27533200/',
@@ -197,18 +197,6 @@ export const caseStudies: CaseStudy[] = [
     impact:
       'Feature consistency across every platform from a single change. Framework-level issues get root-caused once — in Xcode, Android Studio or the browser — instead of four times.',
     tech: ['C++', 'WebAssembly', 'Skia', 'Xcode', 'Android Studio'],
-  },
-  {
-    id: 'automation-portal',
-    kicker: 'Internal tooling',
-    title: 'The Automation Portal',
-    problem:
-      'Developers depended on QA engineers to execute automation runs — a human bottleneck in the middle of every verification loop.',
-    built:
-      'Built an internal portal that lets developers trigger and manage automation execution directly, and provided the internal APIs that QA’s automation workflows were set up on.',
-    impact:
-      'Cut the dependency on QA for routine automation, tightening the loop between writing a fix and proving it. Recognized by the manager, team lead and QA lead.',
-    tech: ['JavaScript', 'Internal APIs', 'Test automation'],
   },
   {
     id: 'bug-ledger',
